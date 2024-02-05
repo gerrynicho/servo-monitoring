@@ -8,12 +8,14 @@ endif()
 find_package(rclcpp REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(tachimawari_interfaces REQUIRED)
+find_package(tachimawari REQUIRED)
 find_package(prometheus-cpp CONFIG REQUIRED)
 
 add_executable(jalan src/main.cpp)
 ament_target_dependencies(jalan
                             rclcpp
-                            tachimawari_interfaces)
+                            tachimawari_interfaces
+                            tachimawari)
 target_link_libraries(jalan #ROS2 library
                         prometheus-cpp::push
                         prometheus-cpp::pull

@@ -47,10 +47,10 @@ class joint_subscriber : public rclcpp::Node
 {
 public:
     joint_subscriber()
-    : Node("joint/current_joints")
+    : Node("joint_subscriber")
     {
         subscription_ = this->create_subscription<CurrentJoints>(
-            "Joint", 10, std::bind(&joint_subscriber::topic_callback, this, _1));
+            "joint/current_joints", 10, std::bind(&joint_subscriber::topic_callback, this, _1));
     }
 private:
     void topic_callback(const CurrentJoints & current_joints_msg) const

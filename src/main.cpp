@@ -1,6 +1,5 @@
 #include <prometheus/exposer.h>
 #include <prometheus/gauge.h>
-#include <prometheus/counter.h>
 #include <prometheus/registry.h>
 
 #include <array>
@@ -17,31 +16,32 @@ using CurrentJoints = tachimawari_interfaces::msg::CurrentJoints;
 using std::placeholders::_1;
 
 prometheus::Exposer exposer{"127.0.0.1:5001"}; //localhost
-auto registry = std::make_shared<prometheus::Registry>();
-auto& Joints = prometheus::BuildGauge()
+std::shared_ptr<prometheus::Registry> registry = 
+    std::make_shared<prometheus::Registry>();
+prometheus::Family<prometheus::Gauge>& Joints = prometheus::BuildGauge()
                 .Name("current_joints")
                 .Help("Joints that will be monitored")
                 .Register(*registry);
-auto& joint_1 = Joints.Add({{"id", "1"}});
-auto& joint_2 = Joints.Add({{"id", "2"}});
-auto& joint_3 = Joints.Add({{"id", "3"}});
-auto& joint_4 = Joints.Add({{"id", "4"}});
-auto& joint_5 = Joints.Add({{"id", "5"}});
-auto& joint_6 = Joints.Add({{"id", "6"}});
-auto& joint_7 = Joints.Add({{"id", "7"}});
-auto& joint_8 = Joints.Add({{"id", "8"}});
-auto& joint_9 = Joints.Add({{"id", "9"}});
-auto& joint_10 = Joints.Add({{"id", "10"}});
-auto& joint_11 = Joints.Add({{"id", "11"}});
-auto& joint_12 = Joints.Add({{"id", "12"}});
-auto& joint_13 = Joints.Add({{"id", "13"}});
-auto& joint_14 = Joints.Add({{"id", "14"}});
-auto& joint_15 = Joints.Add({{"id", "15"}});
-auto& joint_16 = Joints.Add({{"id", "16"}});
-auto& joint_17 = Joints.Add({{"id", "17"}});
-auto& joint_18 = Joints.Add({{"id", "18"}});
-auto& joint_19 = Joints.Add({{"id", "19"}});
-auto& joint_20 = Joints.Add({{"id", "20"}});
+prometheus::Gauge& joint_1 = Joints.Add({{"id", "1"}});
+prometheus::Gauge& joint_2 = Joints.Add({{"id", "2"}});
+prometheus::Gauge& joint_3 = Joints.Add({{"id", "3"}});
+prometheus::Gauge& joint_4 = Joints.Add({{"id", "4"}});
+prometheus::Gauge& joint_5 = Joints.Add({{"id", "5"}});
+prometheus::Gauge& joint_6 = Joints.Add({{"id", "6"}});
+prometheus::Gauge& joint_7 = Joints.Add({{"id", "7"}});
+prometheus::Gauge& joint_8 = Joints.Add({{"id", "8"}});
+prometheus::Gauge& joint_9 = Joints.Add({{"id", "9"}});
+prometheus::Gauge& joint_10 = Joints.Add({{"id", "10"}});
+prometheus::Gauge& joint_11 = Joints.Add({{"id", "11"}});
+prometheus::Gauge& joint_12 = Joints.Add({{"id", "12"}});
+prometheus::Gauge& joint_13 = Joints.Add({{"id", "13"}});
+prometheus::Gauge& joint_14 = Joints.Add({{"id", "14"}});
+prometheus::Gauge& joint_15 = Joints.Add({{"id", "15"}});
+prometheus::Gauge& joint_16 = Joints.Add({{"id", "16"}});
+prometheus::Gauge& joint_17 = Joints.Add({{"id", "17"}});
+prometheus::Gauge& joint_18 = Joints.Add({{"id", "18"}});
+prometheus::Gauge& joint_19 = Joints.Add({{"id", "19"}});
+prometheus::Gauge& joint_20 = Joints.Add({{"id", "20"}});
 
 class joint_subscriber : public rclcpp::Node
 {
@@ -49,14 +49,17 @@ public:
     joint_subscriber()
     : Node("joint_subscriber")
     {
-        subscription_ = this->create_subscription<CurrentJoints>(
+        subscription = this->create_subscription<CurrentJoints>(
             "joint/current_joints", 10, std::bind(&joint_subscriber::topic_callback, this, _1));
     }
 private:
     void topic_callback(const CurrentJoints & current_joints_msg) const
     {
-        RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
+        // RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
         auto & msg = current_joints_msg.joints;
+        for(auto x:msg){
+            RCLCPP_INFO_STREAM(this->get_logger(), x.position);
+        }
         joint_1.Set(msg[0].position);
         joint_2.Set(msg[1].position);
         joint_3.Set(msg[2].position);
@@ -78,7 +81,7 @@ private:
         joint_19.Set(msg[18].position);
         joint_20.Set(msg[19].position);
     }
-    rclcpp::Subscription<CurrentJoints>::SharedPtr subscription_;
+    rclcpp::Subscription<CurrentJoints>::SharedPtr subscription;
 };
 
 int main(int argc, char * argv[]){

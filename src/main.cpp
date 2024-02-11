@@ -55,11 +55,11 @@ public:
 private:
     void topic_callback(const CurrentJoints & current_joints_msg) const
     {
-        // RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
+        RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
         auto & msg = current_joints_msg.joints;
-        for(auto x:msg){
-            RCLCPP_INFO_STREAM(this->get_logger(), x.position);
-        }
+        // for(auto x:msg){
+        //     RCLCPP_INFO_STREAM(this->get_logger(), x.position);
+        // }
         joint_1.Set(msg[0].position);
         joint_2.Set(msg[1].position);
         joint_3.Set(msg[2].position);

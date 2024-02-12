@@ -13,7 +13,6 @@ find_package(prometheus-cpp CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   "src/${PROJECT_NAME}/exporter.cpp"
-  "src/${PROJECT_NAME}/subscriber.cpp"
   )
   
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -40,6 +39,10 @@ $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 $<INSTALL_INTERFACE:include>)
 target_link_libraries(jalan ${PROJECT_NAME})
 
+target_link_libraries(jalan #ROS2 library
+                        prometheus-cpp::push
+                        prometheus-cpp::pull
+                        prometheus-cpp::core)
 
 install(TARGETS
       jalan

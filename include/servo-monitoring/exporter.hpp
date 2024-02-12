@@ -25,8 +25,8 @@ public:
     std::shared_ptr<prometheus::Registry> get_registry();
 private:
     void topic_callback(const ConsumingCurrentJoints & incoming_message) const;
+    rclcpp::Node::SharedPtr node;
     rclcpp::Subscription<ConsumingCurrentJoints>::SharedPtr subscription;
-
     std::shared_ptr<prometheus::Registry> registry;
     prometheus::Family<prometheus::Gauge>& GaugeBuilder;   
     prometheus::Gauge& joint_1;

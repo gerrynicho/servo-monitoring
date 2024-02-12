@@ -72,7 +72,7 @@ exporter::exporter()
       joint_19(GaugeBuilder.Add({{"id", "19"}})),
       joint_20(GaugeBuilder.Add({{"id", "20"}}))
 {
-    subscription = this->create_subscription<ConsumingCurrentJoints>
+    subscription = node->create_subscription<ConsumingCurrentJoints>
                 ("joint/consuming_current_joints", 
                  10,
                  std::bind(&exporter::topic_callback, this, _1));

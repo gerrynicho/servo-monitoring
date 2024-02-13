@@ -16,6 +16,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "tachimawari_interfaces/msg/current_joints.hpp"
 using ConsumingCurrentJoints = tachimawari_interfaces::msg::CurrentJoints;
+using ConsumingCurrentJoint = tachimawari_interfaces::msg::Joint;
 
 class exporter : public rclcpp::Node
 {
@@ -28,7 +29,8 @@ private:
     void topic_callback(const ConsumingCurrentJoints & incoming_message) const;
     rclcpp::Subscription<ConsumingCurrentJoints>::SharedPtr subscription;
     std::shared_ptr<prometheus::Registry> registry;
-    prometheus::Family<prometheus::Gauge>& GaugeBuilder;   
+    prometheus::Family<prometheus::Gauge>& GaugeBuilder;
+    void setGauge(const std::vector<ConsumingCurrentJoint> & new_joints) const;
     prometheus::Gauge& joint_1;
     prometheus::Gauge& joint_2;
     prometheus::Gauge& joint_3;

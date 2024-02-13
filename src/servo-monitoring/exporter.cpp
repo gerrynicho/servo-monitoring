@@ -15,12 +15,11 @@
 #include "rclcpp/rclcpp.hpp"
 #include "tachimawari_interfaces/msg/current_joints.hpp"
 using ConsumingCurrentJoints = tachimawari_interfaces::msg::CurrentJoints;
+using ConsumingCurrentJoint = tachimawari_interfaces::msg::Joint;
 using std::placeholders::_1;
 
-void exporter::topic_callback(const ConsumingCurrentJoints & incoming_message) const
+void exporter::setGauge(const std::vector<ConsumingCurrentJoint> & new_joints) const
 {
-    RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
-    auto & new_joints = incoming_message.joints;
     joint_1.Set(new_joints[0].position);
     joint_2.Set(new_joints[1].position);
     joint_3.Set(new_joints[2].position);
@@ -41,6 +40,13 @@ void exporter::topic_callback(const ConsumingCurrentJoints & incoming_message) c
     joint_18.Set(new_joints[17].position);
     joint_19.Set(new_joints[18].position);
     joint_20.Set(new_joints[19].position);
+}
+
+void exporter::topic_callback(const ConsumingCurrentJoints & incoming_message) const
+{
+    RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
+    auto & new_joints = incoming_message.joints;
+    setGauge(new_joints);
 }
 
 exporter::exporter(rclcpp::Node::SharedPtr node) 

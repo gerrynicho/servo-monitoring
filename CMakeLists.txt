@@ -11,33 +11,38 @@ find_package(tachimawari_interfaces REQUIRED)
 find_package(tachimawari REQUIRED)
 find_package(prometheus-cpp CONFIG REQUIRED)
 
-add_library(${PROJECT_NAME} SHARED
+add_library(exporter SHARED
   "src/${PROJECT_NAME}/exporter.cpp"
-  )
-  
-target_include_directories(${PROJECT_NAME} PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-  
-ament_target_dependencies(${PROJECT_NAME}
+)
+
+ament_target_dependencies(exporter
   rclcpp
   tachimawari_interfaces
   tachimawari
 )
 
+target_link_libraries(exporter #ROS2 library
+                        prometheus-cpp::push
+                        prometheus-cpp::pull
+                        prometheus-cpp::core)
+  
+target_include_directories(exporter PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+  
 install(DIRECTORY "include" DESTINATION ".")
-
-install(TARGETS ${PROJECT_NAME}
-EXPORT export_${PROJECT_NAME}
-ARCHIVE DESTINATION "lib"
-LIBRARY DESTINATION "lib"
-RUNTIME DESTINATION "bin")
 
 add_executable(jalan src/main-monitor.cpp)
 target_include_directories(jalan PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 $<INSTALL_INTERFACE:include>)
-target_link_libraries(jalan ${PROJECT_NAME})
+target_link_libraries(jalan exporter)
+
+ament_target_dependencies(jalan
+  rclcpp
+  tachimawari_interfaces
+  tachimawari
+)
 
 target_link_libraries(jalan #ROS2 library
                         prometheus-cpp::push

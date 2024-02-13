@@ -6,4 +6,4 @@ scrape_configs:
   scrape_interval: 8ms
   static_configs:
   - targets:
-    - localhost:5001
+    - localhost:6969

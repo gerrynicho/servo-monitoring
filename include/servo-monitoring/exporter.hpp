@@ -20,12 +20,12 @@ using ConsumingCurrentJoints = tachimawari_interfaces::msg::CurrentJoints;
 class exporter : public rclcpp::Node
 {
 public:
-    exporter();
+    exporter(rclcpp::Node::SharedPtr node);
     prometheus::Exposer exposer;
     std::shared_ptr<prometheus::Registry> get_registry();
+    rclcpp::Node::SharedPtr node;
 private:
     void topic_callback(const ConsumingCurrentJoints & incoming_message) const;
-    rclcpp::Node::SharedPtr node;
     rclcpp::Subscription<ConsumingCurrentJoints>::SharedPtr subscription;
     std::shared_ptr<prometheus::Registry> registry;
     prometheus::Family<prometheus::Gauge>& GaugeBuilder;   

@@ -43,12 +43,13 @@ void exporter::topic_callback(const ConsumingCurrentJoints & incoming_message) c
     joint_20.Set(new_joints[19].position);
 }
 
-exporter::exporter()
+exporter::exporter(rclcpp::Node::SharedPtr node) 
     : Node("current_subscriber"),
-      exposer("127.0.0.1:8080"),
+      node(node),
+      exposer("127.0.0.1:6969"),
       registry(std::make_shared<prometheus::Registry>()),
       GaugeBuilder(prometheus::BuildGauge()
-                   .Name("current_joints")
+                   .Name("consuming_current_joints")
                    .Help("Joints that will be monitored")
                    .Register(*registry)),
       joint_1(GaugeBuilder.Add({{"id", "1"}})),

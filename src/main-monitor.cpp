@@ -18,9 +18,10 @@ using std::placeholders::_1;
 
 int main(int argc, char * argv[]) {
     rclcpp::init(argc, argv);
-    auto prometheus_exporter = std::make_shared<exporter>();
+    auto node = std::make_shared<rclcpp::Node>("exporter");
+    auto prometheus_exporter = std::make_shared<exporter>(node);
     prometheus_exporter->exposer.RegisterCollectable
         (prometheus_exporter->get_registry());
-    rclcpp::spin(prometheus_exporter);
+    rclcpp::spin(node);
     rclcpp::shutdown();
 }

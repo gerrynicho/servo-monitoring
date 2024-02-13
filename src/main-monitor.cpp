@@ -1,20 +1,10 @@
-#include <prometheus/exposer.h>
-#include <prometheus/gauge.h>
-#include <prometheus/registry.h>
-
 #include "tachimawari_interfaces/msg/current_joints.hpp"
 #include "rclcpp/rclcpp.hpp"
 
-#include "servo-monitoring/exporter.cpp"
+#include "servo-monitoring/exporter.hpp"
 
-#include <array>
 #include <chrono>   
-#include <cstdlib>
 #include <memory>
-#include <string>
-#include <thread>
-using CurrentJoints = tachimawari_interfaces::msg::CurrentJoints;
-using std::placeholders::_1;
 
 int main(int argc, char * argv[]) {
     rclcpp::init(argc, argv);

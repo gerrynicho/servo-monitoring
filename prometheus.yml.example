@@ -2,7 +2,7 @@ global:
   scrape_interval: 15s
 
 scrape_configs:
-- job_name: "servo-monitoring"
+- job_name: "consuming_current_monitor"
   scrape_interval: 8ms
   static_configs:
   - targets:

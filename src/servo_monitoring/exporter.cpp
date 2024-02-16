@@ -1,4 +1,4 @@
-#include "servo-monitoring/exporter.hpp"
+#include "servo_monitoring/exporter.hpp"
 
 #include <prometheus/exposer.h>
 #include <prometheus/gauge.h>
@@ -18,7 +18,7 @@ using ConsumingCurrentJoints = tachimawari_interfaces::msg::CurrentJoints;
 using ConsumingCurrentJoint = tachimawari_interfaces::msg::Joint;
 using std::placeholders::_1;
 
-void exporter::setGauge(const std::vector<ConsumingCurrentJoint> & new_joints) const
+void Exporter::setGauge(const std::vector<ConsumingCurrentJoint> & new_joints) const
 {
     joint_1.Set(new_joints[0].position);
     joint_2.Set(new_joints[1].position);
@@ -42,14 +42,14 @@ void exporter::setGauge(const std::vector<ConsumingCurrentJoint> & new_joints) c
     joint_20.Set(new_joints[19].position);
 }
 
-void exporter::topic_callback(const ConsumingCurrentJoints & incoming_message) const
+void Exporter::topic_callback(const ConsumingCurrentJoints & incoming_message) const
 {
     RCLCPP_INFO_STREAM(this->get_logger(), "Got msg");
     auto & new_joints = incoming_message.joints;
     setGauge(new_joints);
 }
 
-exporter::exporter(rclcpp::Node::SharedPtr node) 
+Exporter::Exporter(rclcpp::Node::SharedPtr node) 
     : Node("current_subscriber"),
       node(node),
       exposer("127.0.0.1:6969"),
@@ -82,11 +82,11 @@ exporter::exporter(rclcpp::Node::SharedPtr node)
     subscription = node->create_subscription<ConsumingCurrentJoints>
                 ("joint/consuming_current_joints", 
                  10,
-                 std::bind(&exporter::topic_callback, this, _1));
+                 std::bind(&Exporter::topic_callback, this, _1));
 }
 
 
-std::shared_ptr<prometheus::Registry> exporter::get_registry()
+std::shared_ptr<prometheus::Registry> Exporter::get_registry()
 {
     return registry;
 }

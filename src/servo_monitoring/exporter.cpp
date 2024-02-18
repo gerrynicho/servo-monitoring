@@ -20,7 +20,6 @@ using std::placeholders::_1;
 
 void Exporter::setGauge(const std::vector<ConsumingCurrentJoint> & new_joints) const
 {
-    // joint_1.Set(new_joints[0].position);
     for(int i = 0; i < 20; i++) {
         joints[i].get().Set(new_joints[i].position);
     }
@@ -42,7 +41,6 @@ Exporter::Exporter(rclcpp::Node::SharedPtr node)
                    .Name("consuming_current_joints")
                    .Help("Joints that will be monitored")
                    .Register(*registry))
-    //   joint_1(GaugeBuilder.Add({{"id", "1"}}))
 {
     joints.reserve(20);
     for(int i = 0; i < 20; i++) {

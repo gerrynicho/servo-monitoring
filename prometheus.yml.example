@@ -1,6 +1,12 @@
 global:
   scrape_interval: 15s
 
+remote_write: # create the profile from grafana cloud account
+- url: https://prometheus-prod-37-prod-ap-southeast-1.grafana.net/api/prom/push
+  basic_auth:
+    username: 
+    password: 
+
 scrape_configs:
 - job_name: "consuming_current_monitor"
   scrape_interval: 8ms

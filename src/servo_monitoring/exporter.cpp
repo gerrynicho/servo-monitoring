@@ -38,7 +38,7 @@ Exporter::Exporter(rclcpp::Node::SharedPtr node)
       exposer("127.0.0.1:6969"),
       registry(std::make_shared<prometheus::Registry>()),
       GaugeBuilder(prometheus::BuildGauge()
-                   .Name("consuming_current_joints")
+                   .Name("consuming_current_joints_on_robot")
                    .Help("Joints that will be monitored")
                    .Register(*registry))
 {

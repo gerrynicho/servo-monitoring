@@ -44,17 +44,6 @@ $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 $<INSTALL_INTERFACE:include>)
 target_link_libraries(jalan ${PROJECT_NAME})
 
-ament_target_dependencies(jalan
-  rclcpp
-  tachimawari_interfaces
-  tachimawari
-)
-
-target_link_libraries(jalan
-                        prometheus-cpp::push
-                        prometheus-cpp::pull
-                        prometheus-cpp::core)
-
 install(TARGETS
       jalan
       DESTINATION lib/${PROJECT_NAME}

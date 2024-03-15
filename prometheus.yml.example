@@ -3,13 +3,6 @@ global:
   external_labels:s
     origin_prometheus: <id>_prometheus_instance
 
-remote_write: # create the config from your grafana cloud account
-# just copy and paste the remote_write config from grafana cloud
-- url:
-  basic_auth: 
-    username:
-    password: # make sure the token has metrics:import scope
-
 scrape_configs:
 - job_name: "consuming_current_monitor"
   scrape_interval: 8ms

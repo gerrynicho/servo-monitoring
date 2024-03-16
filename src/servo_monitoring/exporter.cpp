@@ -43,7 +43,7 @@ Exporter::Exporter(rclcpp::Node::SharedPtr node)
                    .Register(*registry))
 {
     joints.reserve(20);
-    for(int i = 0; i < 20; i++) {
+    for (int i = 0; i < 20; i++) {
         joints[i] = GaugeBuilder.Add({{"id", std::to_string(i+1)}});
     }
     subscription = node->create_subscription<ConsumingCurrentJoints>
